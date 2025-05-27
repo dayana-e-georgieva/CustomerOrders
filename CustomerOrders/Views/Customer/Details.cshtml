@@ -1,0 +1,74 @@
+﻿@using CustomerOrders.Web.Models
+@model CustomerViewModel
+
+@functions {
+	private string TableCellStyle() => "padding: 8px 16px; text-align: center;";
+
+	private bool HasLowStockProducts(OrdersViewModel order)
+	{
+		return order.OrderDetails.Any(x => x.Products.UnitsInStock < x.Products.UnitsOnOrder || x.Products.Discontinued);
+	}
+
+	private decimal CalculateTotalOrderValue(OrdersViewModel order)
+	{
+		return order.OrderDetails.Sum(x => (Math.Round(x.UnitPrice, 2) * x.Quantity) / Convert.ToDecimal(x.Discount));
+	}
+
+	private List<string> GetContactInfo(CustomerViewModel model)
+	{
+		var contactInfo = new List<string>();
+		if (!string.IsNullOrWhiteSpace(model.Phone))
+		{
+			contactInfo.Add($"Phone: {model.Phone}");
+		}
+		if (!string.IsNullOrWhiteSpace(model.Fax))
+		{
+			contactInfo.Add($"Fax: {model.Fax}");
+		}
+		return contactInfo;
+	}
+}
+
+<h2>@Model.ContactName</h2>
+<p><strong>Contact Title:</strong> @Model.ContactTitle</p>
+<p><strong>Company Name:</strong> @Model.CompanyName</p>
+<p>
+	<strong>Address:</strong>
+	@string.Join(", ", new[] {
+	Model.Address,
+	Model.City,
+	Model.Region,
+	Model.PostalCode,
+	Model.Country,
+	}.Where(x => !string.IsNullOrWhiteSpace(x)))
+</p>
+<p>
+	<strong>Contact Info:</strong>
+	@string.Join(", ", GetContactInfo(Model))
+</p>
+
+<h3>Orders</h3>
+<table>
+	<thead>
+		<tr>
+			<th style="@TableCellStyle()">Order ID</th>
+			<th style="@TableCellStyle()">Grand Total</th>
+			<th style="@TableCellStyle()">Total Quantity Ordered</th>
+			<th style="@TableCellStyle()">Order Notes</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var order in Model.Orders)
+		{
+			<tr>
+				<td style="@TableCellStyle()">@order.OrderID</td>
+				<td style="@TableCellStyle()">@CalculateTotalOrderValue(order)</td>
+				<td style="@TableCellStyle()">@order.OrderDetails.Sum(x => x.Quantity)</td>
+				@if (HasLowStockProducts(order))
+				{
+					<td style="@TableCellStyle()">Some products on the order are low on stock or are discountinued.</td>
+				}
+			</tr>
+		}
+	</tbody>
+</table>

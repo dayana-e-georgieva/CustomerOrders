@@ -1,0 +1,15 @@
+C:\New folder\CustomerOrders\CustomerOrders.DataAccess\obj\Debug\net8.0\CustomerOrders.DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\New folder\CustomerOrders\CustomerOrders.DataAccess\obj\Debug\net8.0\CustomerOrders.DataAccess.AssemblyInfoInputs.cache
+C:\New folder\CustomerOrders\CustomerOrders.DataAccess\obj\Debug\net8.0\CustomerOrders.DataAccess.AssemblyInfo.cs
+C:\New folder\CustomerOrders\CustomerOrders.DataAccess\obj\Debug\net8.0\CustomerOrders.DataAccess.csproj.CoreCompileInputs.cache
+C:\New folder\CustomerOrders\CustomerOrders.DataAccess\obj\Debug\net8.0\CustomerOrders.DataAccess.sourcelink.json
+C:\New folder\CustomerOrders\CustomerOrders.DataAccess\bin\Debug\net8.0\CustomerOrders.DataAccess.deps.json
+C:\New folder\CustomerOrders\CustomerOrders.DataAccess\bin\Debug\net8.0\CustomerOrders.DataAccess.runtimeconfig.json
+C:\New folder\CustomerOrders\CustomerOrders.DataAccess\bin\Debug\net8.0\CustomerOrders.DataAccess.dll
+C:\New folder\CustomerOrders\CustomerOrders.DataAccess\bin\Debug\net8.0\CustomerOrders.DataAccess.pdb
+C:\New folder\CustomerOrders\CustomerOrders.DataAccess\obj\Debug\net8.0\CustomerOrders.DataAccess.csproj.AssemblyReference.cache
+C:\New folder\CustomerOrders\CustomerOrders.DataAccess\obj\Debug\net8.0\CustomerOrders.DataAccess.dll
+C:\New folder\CustomerOrders\CustomerOrders.DataAccess\obj\Debug\net8.0\refint\CustomerOrders.DataAccess.dll
+C:\New folder\CustomerOrders\CustomerOrders.DataAccess\obj\Debug\net8.0\CustomerOrders.DataAccess.pdb
+C:\New folder\CustomerOrders\CustomerOrders.DataAccess\obj\Debug\net8.0\CustomerOrders.DataAccess.genruntimeconfig.cache
+C:\New folder\CustomerOrders\CustomerOrders.DataAccess\obj\Debug\net8.0\ref\CustomerOrders.DataAccess.dll
