@@ -14,6 +14,7 @@ A Web API exposing the following endpoints:
 2. CustomerOrders.DataAccess
 
 Handles data access using Entity Framework Core and connects to the Microsoft Northwind sample database.
+
 3. CustomerOrders.Web
 
 An ASP.NET MVC web application that displays:
