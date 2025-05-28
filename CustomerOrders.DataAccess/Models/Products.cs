@@ -6,18 +6,17 @@ namespace CustomerOrders.DataAccess.Models
     public class Products
     {
         [Key]
-        public int ProductID { get; set; }
+        public required int ProductID { get; set; }
 
-        [Required]
         [StringLength(100)]
-        public string ProductName { get; set; }
+        public required string ProductName { get; set; }
 
         public int? SupplierID { get; set; }
 
         public int? CategoryID { get; set; }
 
         [StringLength(50)]
-        public string QuantityPerUnit { get; set; }
+        public string? QuantityPerUnit { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal? UnitPrice { get; set; }

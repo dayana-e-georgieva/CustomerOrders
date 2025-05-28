@@ -10,7 +10,7 @@ namespace CustomerOrders.DataAccess.Models
         public int OrderID { get; set; }
 
         [StringLength(5)]
-        public string CustomerID { get; set; }
+        public string? CustomerID { get; set; }
 
         public int? EmployeeID { get; set; }
 
@@ -43,9 +43,8 @@ namespace CustomerOrders.DataAccess.Models
         [StringLength(15)]
         public string? ShipCountry { get; set; }
 
-        public Customers Customer { get; set; }
+        public Customers? Customer { get; set; }
 
-        public ICollection<OrderDetails> OrderDetails { get; set; } = new List<OrderDetails>();
-
+        public List<OrderDetails> OrderDetails { get; set; } = new List<OrderDetails>();
     }
 }

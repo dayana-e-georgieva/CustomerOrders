@@ -1,15 +1,19 @@
 using CustomerOrders.Web.Services;
+using CustomerOrders.Web.Services.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddHttpClient("CustomerOrdersAPI", client =>
+builder.Services.AddHttpClient<IApiClient, ApiClient>((serviceProvider, client) =>
 {
-    client.BaseAddress = new Uri("https://localhost:7008/api/");
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    var baseUrl = configuration["CustomerOrdersApi:BaseUrl"];
+
+    client.BaseAddress = new Uri(baseUrl);
 });
-builder.Services.AddScoped<CustomerService>();
+
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();

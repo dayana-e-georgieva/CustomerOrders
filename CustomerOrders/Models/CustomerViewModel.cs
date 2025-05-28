@@ -13,7 +13,6 @@
         public string? Country { get; set; }
         public string? Phone { get; set; }
         public string? Fax { get; set; }
-        public int OrderCount { get; internal set; }
-        public List<OrdersViewModel> Orders { get; set; }
+        public int? OrderCount { get; internal set; }
     }
 }

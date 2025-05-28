@@ -1,74 +1,82 @@
 ﻿@using CustomerOrders.Web.Models
-@model CustomerViewModel
+@model CustomerDetailsViewModel
 
 @functions {
-	private string TableCellStyle() => "padding: 8px 16px; text-align: center;";
+    private bool HasLowStockProducts(OrdersViewModel order)
+    {
+        return order.OrderDetails.Any(x => x.Products.UnitsInStock < x.Products.UnitsOnOrder || x.Products.Discontinued);
+    }
 
-	private bool HasLowStockProducts(OrdersViewModel order)
-	{
-		return order.OrderDetails.Any(x => x.Products.UnitsInStock < x.Products.UnitsOnOrder || x.Products.Discontinued);
-	}
+    private decimal CalculateTotalOrderValue(OrdersViewModel order)
+    {
+        return order.OrderDetails.Sum(x =>
+        {
+            if (!decimal.TryParse(x.Discount.ToString(), out var discount) || discount < 0 || discount > 1)
+            {
+                discount = 0;
+            }
+            return Math.Round(x.UnitPrice * x.Quantity * (1 - discount), 2);
+        });
+    }
 
-	private decimal CalculateTotalOrderValue(OrdersViewModel order)
-	{
-		return order.OrderDetails.Sum(x => (Math.Round(x.UnitPrice, 2) * x.Quantity) / Convert.ToDecimal(x.Discount));
-	}
-
-	private List<string> GetContactInfo(CustomerViewModel model)
-	{
-		var contactInfo = new List<string>();
-		if (!string.IsNullOrWhiteSpace(model.Phone))
-		{
-			contactInfo.Add($"Phone: {model.Phone}");
-		}
-		if (!string.IsNullOrWhiteSpace(model.Fax))
-		{
-			contactInfo.Add($"Fax: {model.Fax}");
-		}
-		return contactInfo;
-	}
+    private List<string> GetContactInfo(CustomerDetailsViewModel model)
+    {
+        var contactInfo = new List<string>();
+        if (!string.IsNullOrWhiteSpace(model.Phone)) contactInfo.Add($"Phone: {model.Phone}");
+        if (!string.IsNullOrWhiteSpace(model.Fax)) contactInfo.Add($"Fax: {model.Fax}");
+        return contactInfo;
+    }
 }
 
-<h2>@Model.ContactName</h2>
-<p><strong>Contact Title:</strong> @Model.ContactTitle</p>
-<p><strong>Company Name:</strong> @Model.CompanyName</p>
-<p>
-	<strong>Address:</strong>
-	@string.Join(", ", new[] {
-	Model.Address,
-	Model.City,
-	Model.Region,
-	Model.PostalCode,
-	Model.Country,
-	}.Where(x => !string.IsNullOrWhiteSpace(x)))
-</p>
-<p>
-	<strong>Contact Info:</strong>
-	@string.Join(", ", GetContactInfo(Model))
-</p>
+<div class="container mt-4">
+    <h2 class="mb-3">@Model.ContactName</h2>
+    <div class="mb-4">
+        <p><strong>Contact Title:</strong> @Model.ContactTitle</p>
+        <p><strong>Company Name:</strong> @Model.CompanyName</p>
+        <p>
+            <strong>Address:</strong>
+            @string.Join(", ", new[] {
+            Model.Address,
+            Model.City,
+            Model.Region,
+            Model.PostalCode,
+            Model.Country
+            }.Where(x => !string.IsNullOrWhiteSpace(x)))
+        </p>
+        <p><strong>Contact Info:</strong> @string.Join(", ", GetContactInfo(Model))</p>
+    </div>
 
-<h3>Orders</h3>
-<table>
-	<thead>
-		<tr>
-			<th style="@TableCellStyle()">Order ID</th>
-			<th style="@TableCellStyle()">Grand Total</th>
-			<th style="@TableCellStyle()">Total Quantity Ordered</th>
-			<th style="@TableCellStyle()">Order Notes</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var order in Model.Orders)
-		{
-			<tr>
-				<td style="@TableCellStyle()">@order.OrderID</td>
-				<td style="@TableCellStyle()">@CalculateTotalOrderValue(order)</td>
-				<td style="@TableCellStyle()">@order.OrderDetails.Sum(x => x.Quantity)</td>
-				@if (HasLowStockProducts(order))
-				{
-					<td style="@TableCellStyle()">Some products on the order are low on stock or are discountinued.</td>
-				}
-			</tr>
-		}
-	</tbody>
-</table>
+    <h3 class="mb-3">Orders</h3>
+    <table class="table table-striped table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Order ID</th>
+                <th>Grand Total</th>
+                <th>Total Quantity Ordered</th>
+                <th>Order Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td>@order.OrderID</td>
+                    <td>@CalculateTotalOrderValue(order)</td>
+                    <td>@order.OrderDetails.Sum(x => x.Quantity)</td>
+                    <td>
+                        @if (HasLowStockProducts(order))
+                        {
+                            <span class="text-danger">
+                                Some items are low in stock or discontinued.
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">–</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

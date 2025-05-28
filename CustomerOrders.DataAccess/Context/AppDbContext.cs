@@ -1,7 +1,6 @@
 ﻿using CustomerOrders.DataAccess.Models;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders; // Ensure this namespace is included
 
 namespace CustomerOrders.DataAccess.Context
 {
@@ -13,10 +12,7 @@ namespace CustomerOrders.DataAccess.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Customers>()
-                .HasMany(c => c.Orders)
-                .WithOne(o => o.Customer)
-                .HasForeignKey(o => o.CustomerID);
+            modelBuilder.Entity<Customers>();
 
             modelBuilder.Entity<Orders>()
                 .HasMany(o => o.OrderDetails)

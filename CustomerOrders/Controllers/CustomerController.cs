@@ -1,5 +1,4 @@
-using CustomerOrders.Web.Models;
-using CustomerOrders.Web.Services;
+using CustomerOrders.Web.Services.Contracts;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,20 +6,20 @@ namespace CustomerOrders.Controllers
 {
     public class CustomerController : Controller
     {
-        private readonly CustomerService _service;
+        private readonly ICustomerService _customerService;
 
-        public CustomerController(CustomerService service)
+        public CustomerController(ICustomerService service)
         {
-            _service = service;
+            _customerService = service;
         }
 
         public async Task<IActionResult> Index(string? searchTerm)
         {
-            var customers = await _service.GetCustomersAsync();
+            var customers = await _customerService.GetCustomersWithOrderCountAsync();
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 customers = customers
-                    .Where(c => c.CompanyName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    .Where(c => c.ContactName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
                     .ToList();
             }
             ViewBag.SearchTerm = searchTerm;
@@ -29,13 +28,14 @@ namespace CustomerOrders.Controllers
 
         public async Task<IActionResult> Details(string id)
         {
-            var customer = await _service.GetOrdersByCustomerIdAsync(id);
+            var customer = await _customerService.GetCustomerDetailsAsync(id);
 
-            if (customer == null || string.IsNullOrEmpty(customer.CustomerID))
+            if (customer == null)
+            {
                 return NotFound();
+            }
 
             return View(customer);
         }
-
     }
 }

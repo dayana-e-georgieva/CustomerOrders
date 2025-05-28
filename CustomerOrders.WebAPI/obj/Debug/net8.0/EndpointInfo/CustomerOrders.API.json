@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/Customer": {
+    "/customers": {
       "get": {
         "tags": [
           "Customer"
@@ -43,7 +43,7 @@
         }
       }
     },
-    "/api/Customer/{id}": {
+    "/customer/{id}": {
       "get": {
         "tags": [
           "Customer"
@@ -82,7 +82,7 @@
         }
       }
     },
-    "/api/Customer/{id}/orders": {
+    "/customer/{id}/orders": {
       "get": {
         "tags": [
           "Customer"
@@ -105,7 +105,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Customers"
+                    "$ref": "#/components/schemas/Orders"
                   }
                 }
               },
@@ -113,7 +113,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Customers"
+                    "$ref": "#/components/schemas/Orders"
                   }
                 }
               },
@@ -121,7 +121,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Customers"
+                    "$ref": "#/components/schemas/Orders"
                   }
                 }
               }
@@ -178,13 +178,6 @@
           },
           "fax": {
             "type": "string",
-            "nullable": true
-          },
-          "orders": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Orders"
-            },
             "nullable": true
           }
         },
@@ -320,6 +313,7 @@
       },
       "Products": {
         "required": [
+          "productID",
           "productName"
         ],
         "type": "object",
@@ -331,7 +325,8 @@
           "productName": {
             "maxLength": 100,
             "minLength": 0,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "supplierID": {
             "type": "integer",

@@ -1,32 +1,41 @@
 ﻿@using CustomerOrders.Web.Models
-@model List<CustomerViewModel>
+@model List<CustomerWithOrderCountViewModel>
+
 @{
     ViewBag.Title = "Customers";
 }
 
-<form method="get" asp-action="Index">
-    <input type="text" name="searchTerm" value="@ViewBag.SearchTerm" placeholder="Search by name" />
-    <button type="submit">Search</button>
-</form>
+<div class="container mt-4">
+    <h2 class="mb-4">Customer List</h2>
 
-<table>
-    <thead>
-        <tr>
-            <th>Customer Name</th>
-            <th>Order Count</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var customer in Model)
-        {
+    <form method="get" asp-action="Index" class="mb-3 row g-3">
+        <div class="col-auto">
+            <input type="text" name="searchTerm" value="@ViewBag.SearchTerm" class="form-control" placeholder="Search by name" />
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-light">
             <tr>
-                <td>
-                    <a asp-action="Details" asp-route-id="@customer.CustomerID">
-                        @customer.CompanyName
-                    </a>
-                </td>
-                <td>@customer.OrderCount</td>
+                <th>Customer Name</th>
+                <th class="text-center">Orders Made</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@customer.CustomerID">
+                            @customer.ContactName
+                        </a>
+                    </td>
+                    <td class="text-center">@customer.OrderCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

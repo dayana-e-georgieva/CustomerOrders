@@ -1,34 +1,34 @@
 ﻿using CustomerOrders.DataAccess.Models;
-using CustomerOrders.DataAccess.Repositories;
+using CustomerOrders.DataAccess.Repositories.Contracts;
 
 using Microsoft.AspNetCore.Mvc;
 
 namespace CustomerOrders.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("customer")]
     public class CustomerController : ControllerBase
     {
-        private readonly ICustomerRepository _customerRepository;
+        private readonly IRepository _repository;
 
-        public CustomerController(ICustomerRepository customerRepository) => _customerRepository = customerRepository;
+        public CustomerController(IRepository customerRepository) => _repository = customerRepository;
 
-        [HttpGet]
+        [HttpGet("/customers")]
         public async Task<IEnumerable<Customers>> Get()
         {
-            return await _customerRepository.GetAllAsync();
+            return await _repository.GetAllAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<Customers> GetById(string id)
         {
-            return await _customerRepository.GetByIdAsync(id);
+            return await _repository.GetByIdAsync(id);
         }
 
         [HttpGet("{id}/orders")]
-        public async Task<IEnumerable<Customers>> GetOrdersByCustomerId(string id)
+        public async Task<List<Orders>> GetOrdersByCustomerId(string id)
         {
-            return await _customerRepository.GetCustomerOrdersAsync(id);
+            return await _repository.GetCustomerOrdersAsync(id);
         }
     }
 }

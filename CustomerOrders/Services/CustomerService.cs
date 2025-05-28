@@ -1,46 +1,66 @@
-﻿using System.Text.Json;
-
-using CustomerOrders.Web.Models;
+﻿using CustomerOrders.Web.Models;
+using CustomerOrders.Web.Services.Contracts;
 
 namespace CustomerOrders.Web.Services
 {
-    public class CustomerService
+    public class CustomerService : ICustomerService
     {
-        private readonly HttpClient _httpClient;
+        private readonly IApiClient _apiClient;
 
-        public CustomerService(IHttpClientFactory httpClientFactory)
+        public CustomerService(IApiClient apiClient)
         {
-            _httpClient = httpClientFactory.CreateClient("CustomerOrdersAPI");
+            _apiClient = apiClient;
         }
 
-        public async Task<List<CustomerViewModel>> GetCustomersAsync(string? searchTerm = null)
+        public async Task<List<CustomerWithOrderCountViewModel>> GetCustomersWithOrderCountAsync()
         {
-            var response = await _httpClient.GetAsync("Customer");
-            response.EnsureSuccessStatusCode();
+            var customers = await GetCustomersAsync();
+            var result = new List<CustomerWithOrderCountViewModel>();
 
-            var content = await response.Content.ReadFromJsonAsync<List<CustomerViewModel>>();
-
-            foreach (var customer in content)
+            foreach (var customer in customers)
             {
-                var orders = await _httpClient.GetFromJsonAsync<List<OrdersViewModel>>($"Customer/{customer.CustomerID}/orders");
-                customer.OrderCount = orders.Count;
+                var ordersView = await GetOrdersByCustomerIdAsync(customer.CustomerID);
+
+                result.Add(new CustomerWithOrderCountViewModel
+                {
+                    CustomerID = customer.CustomerID,
+                    ContactName = customer.ContactName,
+                    OrderCount = ordersView.Count,
+                });
             }
 
-            return content ?? new List<CustomerViewModel>();
+            return result;
         }
 
-        public async Task<CustomerViewModel> GetOrdersByCustomerIdAsync(string id)
+        public async Task<CustomerDetailsViewModel> GetCustomerDetailsAsync(string id)
         {
-            var response = await _httpClient.GetAsync($"Customer/{id}/orders");
-            response.EnsureSuccessStatusCode();
+            var customerResponse = await _apiClient.GetAsync<CustomerDetailsViewModel>($"/customer/{id}");
 
-            var content = await response.Content.ReadFromJsonAsync<List<CustomerViewModel>>(new JsonSerializerOptions
+            if (customerResponse == null)
             {
-                PropertyNameCaseInsensitive = true
-            });
+                return new CustomerDetailsViewModel();
+            }
 
-            // Assuming only one customer is returned for a given ID
-            return content?.FirstOrDefault() ?? new CustomerViewModel();
+            var orders = await _apiClient.GetAsync<List<OrdersViewModel>>($"/customer/{id}/orders");
+
+            customerResponse.Orders = orders ?? new List<OrdersViewModel>();
+
+            return customerResponse;
         }
+
+        private async Task<List<CustomerViewModel>> GetCustomersAsync(string? searchTerm = null)
+        {
+            var customers = await _apiClient.GetAsync<List<CustomerViewModel>>("/customers");
+
+            return customers ?? new List<CustomerViewModel>();
+        }
+
+        private async Task<List<OrdersViewModel>> GetOrdersByCustomerIdAsync(string id)
+        {
+            var orders = await _apiClient.GetAsync<List<OrdersViewModel>>($"/customer/{id}/orders");
+
+            return orders ?? new List<OrdersViewModel>();
+        }
+
     }
 }

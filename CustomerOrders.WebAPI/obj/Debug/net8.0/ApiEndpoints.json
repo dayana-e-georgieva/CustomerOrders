@@ -1,28 +1,8 @@
 [
   {
     "ContainingType": "CustomerOrders.API.Controllers.CustomerController",
-    "Method": "Get",
-    "RelativePath": "api/Customer",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[CustomerOrders.DataAccess.Models.Customers, CustomerOrders.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "CustomerOrders.API.Controllers.CustomerController",
     "Method": "GetById",
-    "RelativePath": "api/Customer/{id}",
+    "RelativePath": "customer/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -48,7 +28,7 @@
   {
     "ContainingType": "CustomerOrders.API.Controllers.CustomerController",
     "Method": "GetOrdersByCustomerId",
-    "RelativePath": "api/Customer/{id}/orders",
+    "RelativePath": "customer/{id}/orders",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -59,6 +39,26 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[CustomerOrders.DataAccess.Models.Orders, CustomerOrders.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CustomerOrders.API.Controllers.CustomerController",
+    "Method": "Get",
+    "RelativePath": "customers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.IEnumerable\u00601[[CustomerOrders.DataAccess.Models.Customers, CustomerOrders.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",

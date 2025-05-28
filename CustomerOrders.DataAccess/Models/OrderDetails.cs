@@ -22,6 +22,5 @@ namespace CustomerOrders.DataAccess.Models
         public Orders Order { get; set; }
 
         public Products Products { get; set; }
-
     }
 }
